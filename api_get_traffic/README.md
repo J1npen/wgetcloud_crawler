@@ -36,31 +36,21 @@ pip install flask cloudscraper fake-useragent
 
 ---
 
-## 🔐 环境变量配置
+## 🔐 config.json 配置
 
-在服务器中设置以下环境变量：
+创建并配置 config.json：
 
-```bash
-export WG_COOKIE="你的 wgetcloud 登录 Cookie"
-export WG_TOKEN="你的 API Token 的 MD5 值"
+```json
+{
+  "WG_COOKIE": "your_wgetcloud_cookie",
+  "API_TOKEN": "your_api_token"
+}
 ```
-
-> ⚠️ **注意**：`WG_TOKEN` 不是明文，而是 **Token 的 MD5 值**
-
-例如：
-
-```bash
-echo -n XXX | md5sum
-```
-
-将得到的 MD5 结果作为 `WG_TOKEN`
-
----
 
 ## ▶️ 启动服务
 
 ```bash
-python api_get_traffic.py
+python -m api_get_traffic.api_get_traffic
 ```
 
 默认运行在：
@@ -100,7 +90,7 @@ curl -H "X-API-TOKEN: XXX" http://127.0.0.1:5000/
 ## 🧠 工作原理简述
 
 1. Flask 接收请求
-2. 校验 `X-API-TOKEN` 的 MD5 值
+2. 校验 `X-API-TOKEN` 的值
 3. 使用 Cookie 登录 wgetcloud
 4. 爬取用户流量日志接口
 5. 解析当日流量并格式化返回

@@ -1,3 +1,4 @@
 config.json
 venv/
 test.py
+__pycache__

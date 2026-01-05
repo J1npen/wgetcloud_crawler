@@ -2,9 +2,8 @@ import json
 import cloudscraper
 from fake_useragent import UserAgent
 from datetime import date, timedelta
-import os
 
-def traffic():
+def traffic(cookie):
     # initial fake_useragent
     ua = UserAgent()
 
@@ -22,7 +21,7 @@ def traffic():
 
     url = 'https://3jkkvi9afjjln2yjwnbc.wgetcloud.org/user/log_month'
     headers = {
-        'cookie': os.getenv('WG_COOKIE', ''),
+        'cookie': cookie,
         'User-Agent': ua.random
     }
 

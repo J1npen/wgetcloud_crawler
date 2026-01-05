@@ -1,0 +1,4 @@
+flask 
+cloudscraper 
+fake-useragent
+python-telegram-bot

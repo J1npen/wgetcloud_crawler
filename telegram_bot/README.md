@@ -19,14 +19,15 @@
 
 2. 安装依赖包：
 ```bash
-pip install python-telegram-bot requests
+pip install python-telegram-bot
 ```
 
 3. 创建配置文件 `config.json`：
 ```json
 {
-  "TOKEN": "your_telegram_bot_token",
-  "WG_TOKEN": "your_wgetcloud_api_token"
+  "TG_TOKEN": "your_telegram_bot_token",
+  "WG_TOKEN": "your_wgetcloud_api_token",
+  "WG_COOKIE": "your_wgetcloud_cookie"
 }
 ```
 
@@ -49,12 +50,12 @@ pip install python-telegram-bot requests
 
 使用默认配置文件（config.json）：
 ```bash
-python main.py
+python -m telegram_bot.main
 ```
 
 使用自定义配置文件：
 ```bash
-python main.py /path/to/your/config.json
+python -m telegram_bot.main /path/to/your/config.json
 ```
 
 ### 机器人命令

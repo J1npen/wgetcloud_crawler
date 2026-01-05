@@ -3,6 +3,7 @@ import json
 import logging
 import sys
 from pathlib import Path
+from api_get_traffic import get_today_traffic
 
 import requests
 from telegram import Update
@@ -39,7 +40,7 @@ async def start(update:Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Hi I can get you Wgetcloud traffic flow and tell you how many you use today!")
 
 async def flow(update:Update, context: ContextTypes.DEFAULT_TYPE):
-    traffic_flow_message = await get_traffic_flow()
+    traffic_flow_message = get_today_traffic.traffic(WG_COOKIE)
     await update.message.reply_text(traffic_flow_message)
 
 async def echo(update:Update, context: ContextTypes.DEFAULT_TYPE):
@@ -51,10 +52,11 @@ if __name__ == "__main__":
         config = load_json(sys.argv[1])
     else:
         config = load_json()
-    TOKEN = config.get("TOKEN")
+    TG_TOKEN = config.get("TG_TOKEN")
     WG_TOKEN = config.get("WG_TOKEN")
+    WG_COOKIE = config.get("WG_COOKIE")
 
-    app = ApplicationBuilder().token(TOKEN).build()
+    app = ApplicationBuilder().token(TG_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("flow", flow))
