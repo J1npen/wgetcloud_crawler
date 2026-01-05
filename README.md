@@ -1,115 +1,138 @@
-# 🚀 wgetcloud-traffic-api
+# 🚀 wgetcloud\_crawler
 
-一个用于**获取 wgetcloud 今日流量使用情况**的轻量级 API 服务。\
-适用于自建监控、自动化提醒、流量统计等场景。
+一个围绕 **Wgetcloud 流量使用情况查询** 构建的自动化项目集合，包含：
 
-> **说明**：wgetcloud 是一个境外流量服务提供商，本项目仅用于**用户本人账户的自动化查询**。
+- 🌐 **HTTP API 服务**（供程序 / VPS / 手机调用）
+- 🤖 **Telegram Bot**（通过聊天指令查询流量）
 
----
+适用于：\
+**自用流量监控、自动化提醒、脚本集成、Telegram 查询等场景**
 
-## ✨ 功能特性
-
-- 🌐 基于 Flask 提供 HTTP API
-- 🔐 使用 Token 进行接口访问鉴权
-- 🧭 自动爬取 wgetcloud 用户面板流量数据
-- 📊 智能识别单位（M / G）
-- 🧩 适合部署在 VPS，供手机/脚本调用
+> ⚠️ 说明：\
+> Wgetcloud 为境外流量服务提供商，本项目仅用于 **用户本人账户的自动化查询**，不涉及任何破解或越权行为。
 
 ---
 
-## 🧱 项目结构
+## ✨ 项目组成
 
 ```
-.
-├── api_get_traffic.py      # Flask API 主程序
-├── get_today_traffic.py   # 负责爬取并解析流量数据
-└── README.md
-```
-
----
-
-## 🛠️ 安装依赖
-
-```bash
-pip install flask cloudscraper fake-useragent
+wgetcloud_crawler/
+├── api_get_traffic/      # Flask API：提供 HTTP 接口查询流量
+│   └── README.md
+│
+├── telegram_bot/         # Telegram Bot：聊天指令查询流量
+│   └── README.md
+│
+├── venv/                 # Python 虚拟环境（建议忽略提交）
+└── README.md             # 项目总说明（本文件）
 ```
 
 ---
 
-## 🔐 环境变量配置
+## 📦 子项目说明
 
-在服务器中设置以下环境变量：
+### 🌐 api\_get\_traffic（HTTP API 服务）
 
-```bash
-export WG_COOKIE="你的 wgetcloud 登录 Cookie"
-export WG_TOKEN="你的 API Token 的 MD5 值"
-```
+一个轻量级 Flask API，用于：
 
-> ⚠️ **注意**：`WG_TOKEN` 不是明文，而是 **Token 的 MD5 值**
+- 自动爬取 Wgetcloud 面板
+- 解析 **今日流量使用情况**
+- 通过 HTTP 接口返回 JSON 数据
 
-例如：
+**适合场景：**
 
-```bash
-echo -n XXX | md5sum
-```
+- VPS 部署
+- 手机 / 脚本 / 其他服务调用
+- 为 Telegram Bot 提供数据来源
 
-将得到的 MD5 结果作为 `WG_TOKEN`
-
----
-
-## ▶️ 启动服务
-
-```bash
-python api_get_traffic.py
-```
-
-默认运行在：
-
-```
-http://127.0.0.1:5000/
-```
+📄 详细说明请查看：\
+👉 [`api_get_traffic/README.md`](./api_get_traffic/README.md)
 
 ---
 
-## 📡 API 使用方式
+### 🤖 telegram\_bot（Telegram 流量查询机器人）
 
-### 请求示例
+一个 Telegram Bot，用于：
 
-```bash
-curl -H "X-API-TOKEN: XXX" http://127.0.0.1:5000/
-```
+- 通过 `/flow` 指令查询今日流量
+- 通过 `/start` 启动交互
+- 对普通文本进行回显（测试用）
 
-### 返回示例
+**特点：**
 
-```json
-{
-  "msg": "今日已使用 360.0M"
-}
-```
+- 基于 `python-telegram-bot`
+- 使用 `config.json` 管理 Token
+- 可部署在服务器后台长期运行
 
-或
-
-```json
-{
-  "msg": "今日已使用 2.41G"
-}
-```
+📄 详细说明请查看：\
+👉 [`telegram_bot/README.md`](./telegram_bot/README.md)
 
 ---
 
-## 🧠 工作原理简述
+## 🧠 整体工作流程
 
-1. Flask 接收请求
-2. 校验 `X-API-TOKEN` 的 MD5 值
-3. 使用 Cookie 登录 wgetcloud
-4. 爬取用户流量日志接口
-5. 解析当日流量并格式化返回
+```
+[Telegram 用户]
+        │
+        ▼
+[Telegram Bot]
+        │
+        ▼
+[HTTP API 服务]
+        │
+        ▼
+[Wgetcloud 用户面板]
+```
+
+- Telegram Bot 接收用户命令
+- Bot 请求本地 / 远程 API
+- API 爬取并解析流量数据
+- 返回结果并展示给用户
+
+---
+
+## 🛠️ 技术栈
+
+- Python 3.x
+- Flask
+- python-telegram-bot
+- requests / cloudscraper
+- Linux / VPS（推荐）
+
+---
+
+## 🔐 安全与配置说明
+
+- **Cookie / Token 均由用户自行获取**
+- 不提供任何账号获取、破解方式
+- 建议：
+  - `config.json` 加入 `.gitignore`
+  - 环境变量仅用于服务端
+  - 不要将敏感信息提交到 GitHub
 
 ---
 
 ## ⚠️ 使用须知
 
-- 本项目**只适用于用户本人账户**
-- 不提供 Cookie 获取方式
+- 本项目仅限 **个人账户使用**
+- 页面结构变化可能导致爬虫失效
+- 不保证长期可用性
 - 请勿用于任何非法用途
-- wgetcloud 页面结构变化可能导致接口失效
+
+---
+
+## 📄 License
+
+本项目为个人学习与自用项目，\
+如需开源发布，建议选择：
+
+- MIT License
+- 或 Apache License 2.0
+
+---
+
+## 🙌 致谢
+
+- Wgetcloud（流量服务提供商）
+- Telegram Bot API
+- Flask & Python 社区
