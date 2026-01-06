@@ -30,12 +30,6 @@ def load_json(filename="config.json"):
     logging.info(f"Json: Loaded {config_path}")
     return config
 
-async def get_traffic_flow():
-    url = "https://traffic.jinpen.icu"
-    headers = {"X-API-TOKEN": WG_TOKEN}
-    response = requests.get(url, headers=headers)
-    return response.json().get("msg")
-
 async def start(update:Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Hi I can get you Wgetcloud traffic flow and tell you how many you use today!")
 
@@ -53,7 +47,6 @@ if __name__ == "__main__":
     else:
         config = load_json()
     TG_TOKEN = config.get("TG_TOKEN")
-    WG_TOKEN = config.get("WG_TOKEN")
     WG_COOKIE = config.get("WG_COOKIE")
 
     app = ApplicationBuilder().token(TG_TOKEN).build()

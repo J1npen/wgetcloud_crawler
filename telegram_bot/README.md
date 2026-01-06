@@ -26,7 +26,6 @@ pip install python-telegram-bot
 ```json
 {
   "TG_TOKEN": "your_telegram_bot_token",
-  "WG_TOKEN": "your_wgetcloud_api_token",
   "WG_COOKIE": "your_wgetcloud_cookie"
 }
 ```
