@@ -13,6 +13,11 @@
 
 ---
 
+## 📄 您需要准备的所有东西
+1. Wgetcloud Cookie
+2. API Token -- 您自行设置的 API Token，类似用于您 API 的一个密码
+3. Telegram Bot API Token -- 自行向 Telegram 申请的 Token，详见 telegram_bot/README.md
+
 ## ✨ 项目组成
 
 ```
