@@ -14,9 +14,14 @@
 ---
 
 ## 📄 您需要准备的所有东西
+
+**对于 API 服务：**
 1. Wgetcloud Cookie
 2. API Token -- 您自行设置的 API Token，类似用于您 API 的一个密码
-3. Telegram Bot API Token -- 自行向 Telegram 申请的 Token，详见 telegram_bot/README.md
+
+**对于 Telegram Bot：**
+1. Telegram Bot API Token -- 自行向 Telegram 申请的 Token，详见 telegram_bot/README.md
+2. Wgetcloud Cookie -- 每个用户通过 Bot 命令自行设置（支持多用户）
 
 ## ✨ 项目组成
 
@@ -60,13 +65,17 @@ wgetcloud_crawler/
 一个 Telegram Bot，用于：
 
 - 通过 `/flow` 指令查询今日流量
+- 通过 `/setcookie` 设置个人 Wgetcloud Cookie
+- 通过 `/removecookie` 删除已保存的 Cookie
 - 通过 `/start` 启动交互
 - 对普通文本进行回显（测试用）
 
 **特点：**
 
 - 基于 `python-telegram-bot`
-- 使用 `config.json` 管理 Token
+- 支持多用户：每个用户使用自己的 Wgetcloud Cookie
+- 用户数据本地存储（`user_cookies.json`）
+- 使用 `config.json` 管理 Bot Token
 - 可部署在服务器后台长期运行
 
 📄 详细说明请查看：\
