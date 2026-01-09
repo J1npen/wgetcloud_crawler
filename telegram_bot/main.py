@@ -144,11 +144,42 @@ async def flow(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     try:
-        traffic_flow_message = get_today_traffic.traffic(cookie)
+        traffic_dic = get_today_traffic.traffic(cookie)
+        traffic = traffic_dic.get("traffic", 0)
+        unit = traffic_dic.get("unit", "G")
+        traffic_flow_message = f"今日已使用 {traffic}{unit}"
         await update.message.reply_text(traffic_flow_message)
         logging.info(f"User {user_id} queried traffic successfully")
     except Exception as e:
         logging.error(f"Error getting traffic for user {user_id}: {e}")
+        await update.message.reply_text(
+            "❌ 查询失败，请检查你的 Cookie 是否有效。\n\n"
+            "如需更新 Cookie，请使用：\n"
+            "/setcookie <your_wgetcloud_cookie>"
+        )
+
+async def remain(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    cookie = get_user_cookie(user_id)
+
+    if not cookie:
+        await update.message.reply_text(
+            "❌ 你还没有设置 Wgetcloud Cookie。\n\n"
+            "请先使用以下命令设置：\n"
+            "/setcookie <your_wgetcloud_cookie>"
+        )
+        return
+
+    try:
+        result = get_today_traffic.parse_traffic_and_reset_date(cookie)
+        remain_flow = round(result.get("total_traffic") - result.get("used_traffic"), 2)
+        unit = result.get("traffic_unit")
+        available_days = result.get("available_days")
+        message = f"剩余流量：{remain_flow}{unit}（{available_days}天）"
+        await update.message.reply_text(message)
+        logging.info(f"User {user_id} queried remain flow successfully")
+    except Exception as e:
+        logging.error(f"Error getting remain flow for user {user_id}: {e}")
         await update.message.reply_text(
             "❌ 查询失败，请检查你的 Cookie 是否有效。\n\n"
             "如需更新 Cookie，请使用：\n"
@@ -171,6 +202,7 @@ if __name__ == "__main__":
     # Add command handlers
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("flow", flow))
+    app.add_handler(CommandHandler("remain", remain))
     app.add_handler(CommandHandler("setcookie", setcookie))
     app.add_handler(CommandHandler("removecookie", removecookie))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))

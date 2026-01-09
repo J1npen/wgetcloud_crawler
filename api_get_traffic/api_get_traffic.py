@@ -34,9 +34,11 @@ def index():
     if input_token_encode != API_TOKEN:
         return {"error": "invalid token"}, 401
 
-    traffic_text = get_today_traffic.traffic(WG_COOKIE)
+    traffic_dic = get_today_traffic.traffic(WG_COOKIE)
+    traffic = traffic_dic.get("traffic")
+    unit = traffic_dic.get("unit")
     return Response(
-    json.dumps({"msg": traffic_text}, ensure_ascii=False),
+    json.dumps({"msg": f"今日已使用 {traffic}{unit} "}, ensure_ascii=False),
     content_type = "application/json; charset=utf-8"
 )
 
