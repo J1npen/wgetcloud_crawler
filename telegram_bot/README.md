@@ -138,10 +138,6 @@ python -m telegram_bot.main /path/to/your/config.json
 ### 首次使用提示设置 Cookie
 这是正常的！每个用户首次使用都需要设置自己的 Cookie。按照 `/start` 命令的提示获取并设置即可。
 
-## 许可证
-
-请根据项目实际情况添加相应的开源许可证。
-
 ## 贡献
 
 欢迎提交 Issue 和 Pull Request 来改进这个项目。

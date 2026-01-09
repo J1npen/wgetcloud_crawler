@@ -1,5 +1,7 @@
 # 🚀 wgetcloud\_crawler
 
+<img height="500" alt="图片实例" src="https://github.com/user-attachments/assets/b7b5a983-669a-4ab8-b4bb-190005430859" />
+
 一个围绕 **Wgetcloud 流量使用情况查询** 构建的自动化项目集合，包含：
 
 - 🌐 **HTTP API 服务**（供程序 / VPS / 手机调用）
