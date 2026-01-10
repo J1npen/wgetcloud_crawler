@@ -1,7 +1,5 @@
 from flask import Flask, request, jsonify, Response
 from . import get_today_traffic
-import hashlib
-import os
 import json
 import sys
 from pathlib import Path

@@ -2,6 +2,7 @@ import json
 import cloudscraper
 from fake_useragent import UserAgent
 from datetime import date, timedelta, datetime
+from zoneinfo import ZoneInfo
 from bs4 import BeautifulSoup
 import re
 
@@ -10,9 +11,6 @@ ua = UserAgent()
 
 # initial cloudscraper
 scraper = cloudscraper.create_scraper()
-
-today = date.today()
-yesterday = today - timedelta(days=1)
 
 def parse_traffic_and_reset_date(cookie: str) -> dict:
     # scrap the web page from the url
@@ -54,6 +52,7 @@ def parse_traffic_and_reset_date(cookie: str) -> dict:
                 result["raw_reset_date"] = text
 
                 # Calculate the number of days until the traffic reset date
+                today = datetime.now(ZoneInfo("Asia/Shanghai")).date()
                 target_date = datetime.strptime(m.group(1), "%Y-%m-%d").date()
                 available_days = (target_date - today).days
                 result["available_days"] = available_days
@@ -68,7 +67,8 @@ def parse_traffic_and_reset_date(cookie: str) -> dict:
 
 def traffic(cookie):
     # request body data
-    date_str = f"{yesterday} 至 {today}"
+    today = datetime.now(ZoneInfo("Asia/Shanghai")).date()
+    date_str = f"{today} 至 {today}"
     data = {
         'date': date_str,
         'email': ''
@@ -90,7 +90,7 @@ def traffic(cookie):
     # print(responds.text)  # {"date":["2025-12-15","2025-12-16"],"t":[10.91,0.73],"t_u":[0.06,0.05],"t_d":[10.85,0.68]}
 
     data_dict = responds.json() # {'date': ['2025-12-15', '2025-12-16'], 't': [10.91, 0.74], 't_u': [0.06, 0.06], 't_d': [10.85, 0.68]}
-    traffic = data_dict.get('t')[1]
+    traffic = data_dict.get('t')[0]
 
     # Automatically determine the unit of flow
     if traffic < 1:
@@ -108,5 +108,5 @@ def traffic(cookie):
     
 if __name__ == "__main__":
     cookie = input("Input your cookie: ")
-    result = parse_traffic_and_reset_date(cookie)
+    result = traffic(cookie)
     print(result)
