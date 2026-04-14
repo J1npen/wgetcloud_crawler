@@ -1,3 +1,5 @@
 venv/
 gen_tree.py
 nul
+test.py
+__pycache__

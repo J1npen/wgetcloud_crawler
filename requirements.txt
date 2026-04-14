@@ -3,3 +3,4 @@ cloudscraper
 fake-useragent
 python-telegram-bot
 beautifulsoup4
+tzdata

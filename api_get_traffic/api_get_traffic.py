@@ -32,11 +32,17 @@ def index():
     if input_token_encode != API_TOKEN:
         return {"error": "invalid token"}, 401
 
-    traffic_dic = get_today_traffic.traffic(WG_COOKIE)
-    traffic = traffic_dic.get("traffic")
-    unit = traffic_dic.get("unit")
+    today_traffic_dic = get_today_traffic.traffic(WG_COOKIE)
+    traffic = today_traffic_dic.get("traffic")
+    today_unit = today_traffic_dic.get("unit")
+
+    result = get_today_traffic.parse_traffic_and_reset_date(WG_COOKIE)
+    remain_flow = round(result.get("total_traffic") - result.get("used_traffic"), 2)
+    unit = result.get("traffic_unit")
+    available_days = result.get("available_days")
+    message = f"今日已使用：{traffic}{today_unit}\n剩余流量：{remain_flow}{unit}（{available_days}天）"
     return Response(
-    json.dumps({"msg": f"今日已使用 {traffic}{unit} "}, ensure_ascii=False),
+    json.dumps({"msg": message}, ensure_ascii=False),
     content_type = "application/json; charset=utf-8"
 )
 
